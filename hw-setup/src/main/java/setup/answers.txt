@@ -3,32 +3,38 @@
 
 1. Why did Fibonacci fail the testThrowsIllegalArgumentException< test? What (if anything) did
 you have to do to fix it? If you did not have to change anything to fix this issue, explain why.
-
+When n = 0, the method should not throw an exception, but it does. According to the method
+specification, I'll fix it by replacing x <= 0 in the if condition with x < 0.
 
 
 2. Why did Fibonacci fail the testBaseCase test? What (if anything) did you have to do to fix
 it? If you did not have to change anything to fix this issue, explain why.
-
+The testBaseCase test includes two base cases which are n = 0 and n = 1 and inputting either one
+of them should return 1. However, when n = 0, the method throws an exception mistakenly. I changed
+the if condition to be n < 0 to fix the issue.
 
 
 3.Why did Fibonacci fail the testInductiveCase test? What (if anything) did you have to do to
 fix it? If you did not have to change anything to fix this issue, explain why.
-
+This test failed because the method regards n = 2 as a base case which return 1. I changed the else
+if condition to be n < 2 to fix the issue.
 
 
 ## Part 8: Debugger Tutorial
 
 1. What are the values of "x", "y", and "sum" printed by your statement? Why was x not equal 
 to the first integer entered here, and how could we fix this?
-
+x = 4, y = 4 and sum = 0. x was not equal to the first integer entered because the first integer
+was integer divided by 2 and then multiplied by 2, 5 / 2 = 2 and 2 * 2 = 4. We could fix this by
+making x = console.nextInt().
 
 
 2. What are all the names and values listed in the “Variables” panel? What does the “frames” 
 tab list as the current method and line number? (Write down the text that was highlighted when 
 the Debug perspective first opened.)
-
+x = 3 and y = 4. The "frames" tab lists computeSum:45, Adder.
 
 
 3. What are all the names and values listed in the “Variables” panel after each of the two step overs?
-
-
+After the first step over, there are x = 3 and y = 4.
+After the second step over, there are x = 3, y = 4 and sum = -1.
