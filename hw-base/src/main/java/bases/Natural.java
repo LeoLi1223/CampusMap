@@ -69,12 +69,15 @@ public class Natural {
     //       Include an explanation of why postcondition holds at each return statement.
     //       You can use the template given right before the postcondition in this method.
 
-    int i = 0;  // TODO: feel free to change 0 to something else
+    int i = digits.length - 1;
 
-    // TODO: write your loop here
+    // Inv: D[i+1], ..., D[n-1] are all zero
+    while (i != 0 && digits[i] == 0) {
+      i--;
+    }
 
-    // At this point in the code, we know that _________.
-    // This implies the postcondition below, since __________.
+    // At this point in the code, we know that D[i+1], ..., D[n-1] are all zero AND (i = 0 or D[i] != 0).
+    // This implies the postcondition below, since they are exactly the same.
 
     // Post: D[i+1], ..., D[n-1] are all zero and (D[i] != 0 or i = 0)
     return i;
@@ -227,10 +230,15 @@ public class Natural {
 
     StringBuilder buf = new StringBuilder();
 
-    // TODO: write your loop here
+    int i = digits.length - 1;
+    // Inv: buf = ch(D[n-1]), ..., ch(D[i+1])
+    while (i != -1) {
+      buf.append(digits[i]);
+      i--;
+    }
 
-    // At this point in the code, we know that _________.
-    // This implies the postcondition below, since __________.
+    // At this point in the code, we know that buf = ch(D[n-1]), ..., ch(D[i+1]) and i = -1.
+    // This implies the postcondition below, since substituting i = -1 to buf gives buf = ch(D[n-1]), ..., ch(D[0]).
 
     // Post: buf = ch(D[n-1]), ch(D[n-2]), ..., ch(D[0])
     return buf.toString();
