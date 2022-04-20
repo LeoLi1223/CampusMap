@@ -66,7 +66,7 @@ public class Natural {
   public static int leadingDigit(int[] digits) {
     int i = digits.length - 1;
 
-    // Inv: D[i+1], ..., D[n-1] are all zero
+    // Inv: digits[i+1] = digits[i+2] = ... = digits[n-1] = 0
     while (i != 0 && digits[i] == 0) {
       i--;
     }
@@ -185,28 +185,27 @@ public class Natural {
 
     // Hints: 1. Compare this invariant to the one from getValue above
     //        2. Take advantage of the existing methods, plus and times.
-    //
-    // TODO: Implement the method below, whose invariant is provided.
-    //       Your code must be correct with the invariant written.
-    //       Include a comment explaining why the postcondition follows from
-    //           the facts we know from above it.
 
     Natural r = new Natural(base);
     Natural b = new Natural(base, this.base);
 
-    // TODO: Initialize i,j such that the invariant below holds initially.
-    int i = -1;
+    int i = this.digits.length; // n
     int j = -1;
 
     // Inv: r = (base, D[i] b^0 + D[i+1] b^1 + ... + D[n-1] b^j) and i+j = n-1,
     //      where D = this.digits, n = this.digits.length, and b = this.base
-    while (i != -1) {  // TODO: Replace the condition here with a suitable one.
-
-      // TODO: Implement the body of this loop, so that it's correct with the given invariant.
-
+    while (i != 0) {
+      i--;
+      j++;
+      r = r.times(b).plus(new Natural(base, this.digits[i]));
+      // r = (base, D[i] b^0 + D[i+1] b^1 + ... + D[n-1] b^j) and i+j = n-1,
     }
 
-    // TODO: Explain why the postcondition holds at the end of this code.
+    // At this point in the code, we know that i = 0 and the invariant of the loop above.
+    // Then, we know j = n-1 and r = (base, D[0] b^0 + ... + D[n-1] b^{n-1}).
+    // Since this.value = D[0] b^0 + ... + D[n-1] b^{n-1} given by the postcondition of getValue(),
+    // r = (base, this.value()). Therefore, the postcondition holds.
+
     // Post: r = (base, this.value())
     return r;
   }
