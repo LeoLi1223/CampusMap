@@ -12,8 +12,13 @@ public class SimpleSetTest {
   /** Tests calculating the size of a set. */
   @Test
   public void testSize() {
-    // TODO: implement this
-    
+    assertEquals(0f, S.size(), 0); // empty set
+    assertEquals(1f ,S1.size(), 0); // an element
+    assertEquals(3f, S123.size(), 0); // many elements
+
+    assertEquals(Float.POSITIVE_INFINITY, R.size(), 0); // all real numbers
+    assertEquals(Float.POSITIVE_INFINITY, R1.size(), 0);
+    assertEquals(Float.POSITIVE_INFINITY, R123.size(), 0);
   }
 
   /** Tests converting a set to a string. */

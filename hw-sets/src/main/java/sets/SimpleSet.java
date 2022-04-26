@@ -11,9 +11,11 @@ import java.util.List;
  */
 public class SimpleSet {
 
-  // TODO: fill in and document the representation
-  //       Make sure to include the representation invariant (RI)
-  //       and the abstraction function (AF).
+  // RI: complement != null and points != null
+  // AF(this) = this.points      if complement = false
+  //          = R \ this.points  if complement = true
+  private final boolean complement;
+  private final FiniteSet points;
 
   /**
    * Creates a simple set containing only the given points.
@@ -22,8 +24,8 @@ public class SimpleSet {
    * @spec.effects this = {vals[0], vals[1], ..., vals[vals.length-1]}
    */
   public SimpleSet(float[] vals) {
-    // TODO: implement this
-
+    this.complement = false;
+    this.points = FiniteSet.of(vals);
   }
 
   /**
@@ -34,8 +36,8 @@ public class SimpleSet {
    * @spec.effects this = R \ points if complement else points
    */
   private SimpleSet(boolean complement, FiniteSet points) {
-    // TODO: implement this
-
+    this.complement = complement;
+    this.points = points;
   }
 
   @Override
@@ -44,7 +46,7 @@ public class SimpleSet {
       return false;
 
     SimpleSet other = (SimpleSet) o;
-    return this == other;  // TODO: replace this with a correct check
+    return this.complement == other.complement && this.points.equals(other.points);
   }
 
   @Override
@@ -58,9 +60,12 @@ public class SimpleSet {
    *         infty  if this = R \ {p1, p2, ..., pN}
    */
   public float size() {
-    // TODO: implement this
-
-    return 0;
+    // Case 1: this.complement = true. Then, this represents the complement
+    //         of the given set. Thus, it should return positive infinity.
+    // Case 2: this.complement = false. Then, this represents the set of
+    //         finitely many numbers. Thus, it should return the number of
+    //         points in the set, which is the size of the points.
+    return this.complement ? Float.POSITIVE_INFINITY : (float) this.points.size();
   }
 
   /**
@@ -84,10 +89,13 @@ public class SimpleSet {
    * @return R \ this
    */
   public SimpleSet complement() {
-    // TODO: implement this method
-    //       include sufficient comments to see why it is correct (hint: cases)
-
-    return new SimpleSet(new float[] {});
+    // Case 1: this represents the given finite set of points, which is this.points.
+    //         The constructor creates a new SimpleSet of R \ this.points, which matches
+    //         the return of the method.
+    // Case 2: this represents the complement of the given set, which is R \ this.points.
+    //         The constructor creates a new SimpleSet of this.points = R \ (R \ this.points),
+    //         which also matches the return of the method.
+    return new SimpleSet(!this.complement, this.points);
   }
 
   /**
@@ -97,10 +105,31 @@ public class SimpleSet {
    * @return this union other
    */
   public SimpleSet union(SimpleSet other) {
-    // TODO: implement this method
-    //       include sufficient comments to see why it is correct (hint: cases)
-
-    return new SimpleSet(new float[] {});
+    // Case 1: Both sets are finite. Then, all elements in this.points and other.points
+    //         should be included in the resulting set. Thus, the method should return
+    //         the union of this.points and other.points.
+    if (!this.complement && !other.complement) {
+      return new SimpleSet(false, this.points.union(other.points));
+    }
+    // Case 2: Both set are finite complement. Then, this.points and other.points are
+    //         the elements excluded in this and other. Thus, the intersection of them
+    //         contains the elements that should be excluded in the union of this and
+    //         others. In this case, the method should return the complement of the
+    //         intersection of this.points and other.points.
+    if (this.complement && other.complement) {
+      return new SimpleSet(true, this.points.intersection(other.points));
+    }
+    // Case 3: this is finite and other is finite complement. Then, other.points are
+    //         elements excluded. other.points - this.points are the elements need to
+    //         exclude in the union. Thus, the method returns the complement of
+    //         (other.points - this.points).
+    if (!this.complement && other.complement) {
+      return new SimpleSet(true, other.points.difference(this.points));
+    }
+    // Case 4: this is finite complement and other is finite. This case is similar to
+    //         Case 3 except swapping this and other. Thus, applying the same logic,
+    //         the method returns the complement of (this.points - other.points).
+    return new SimpleSet(true, this.points.difference(other.points));
   }
 
   /**
@@ -110,11 +139,26 @@ public class SimpleSet {
    * @return this intersect other
    */
   public SimpleSet intersection(SimpleSet other) {
-    // TODO: implement this method
-    //       include sufficient comments to see why it is correct
-    // NOTE: There is more than one correct way to implement this.
-
-    return new SimpleSet(new float[] {});
+    // Case 1: Both sets are finite. The method should simply return
+    //         the FiniteSet intersection of two set of points.
+    if (!this.complement && !other.complement) {
+      return new SimpleSet(false, this.points.intersection(other.points));
+    }
+    // Case 2: Both sets are finite complement. Then, all points of this and
+    //         other should be excluded in the intersection. Therefore, the method
+    //         returns the complement of the union of the excluded points.
+    if (this.complement && other.complement) {
+      return new SimpleSet(true, this.points.union(other.points));
+    }
+    // Case 3: Only this set is finite complement. Then all points in this should be
+    //         excluded. The method should return the finite set of points in other.points
+    //         not in this.points.
+    if (this.complement) {
+      return new SimpleSet(false, other.points.difference(this.points));
+    }
+    // Case 4: Only other is finite complement. Applying similar logic in Case 3, the
+    //         method should return the finite set of points in this.points but other.points.
+    return new SimpleSet(false, this.points.difference(other.points));
   }
 
   /**
@@ -124,11 +168,28 @@ public class SimpleSet {
    * @return this minus other
    */
   public SimpleSet difference(SimpleSet other) {
-    // TODO: implement this method
-    //       include sufficient comments to see why it is correct
-    // NOTE: There is more than one correct way to implement this.
-
-    return new SimpleSet(new float[] {});
+    // Case 1: Both sets are finite. Then, simply return the finite set of points in
+    //         this not in other.
+    if (!this.complement && !other.complement) {
+      return new SimpleSet(false, this.points.difference(other.points));
+    }
+    // Case 2: Both sets are finite complement. Since we want the set of points in this
+    //         not in other, only points in others.points can be included. Thus, the method
+    //         returns a finite set of other.points - this.points.
+    if (this.complement && other.complement) {
+      return new SimpleSet(false, other.points.difference(this.points));
+    }
+    // Case 3: this is finite and other is finite complement. The resulting set should
+    //         consist of points in this finite set not in other finite set. Thus, the
+    //         method returns a finite set of this.points intersecting with other.points.
+    if (!this.complement) {
+      return new SimpleSet(false, this.points.intersection(other.points));
+    }
+    // Case 4: this is finite complement and other is finite. Points in both this finite
+    //         set and other finite set should be excluded since this = R \ this.points and
+    //         we want this \ other. Thus, the method returns the complement of the union
+    //         of this finite set and other finite set.
+    return new SimpleSet(true, this.points.union(other.points));
   }
 
 }
