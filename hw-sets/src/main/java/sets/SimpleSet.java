@@ -80,8 +80,37 @@ public class SimpleSet {
   public String toString() {
     // TODO: implement this with a loop. document its invariant
     //       a StringBuilder may be useful for creating the string
+    List<Float> finiteSet = this.points.getPoints();
+    if (!this.complement && finiteSet.isEmpty()) {
+      return "{}";
+    }
 
-    return "";
+    if (this.complement && finiteSet.isEmpty()) {
+      return "R";
+    }
+
+    StringBuilder sb = new StringBuilder();
+    if (this.complement) {
+      sb.append("R \\ ");
+    }
+    sb.append("{");
+
+    // precondition:
+    // (1)  sb = "R \ {" if this.complement = true
+    //         = "{"     otherwise
+    // (2)  finiteSet.size() > 0
+
+    int i = 0;
+    // Inv: sb = "R \ {p[0] p[1] ... p[i-1]" if this.complement = true
+    //         = "{p[0] p[1] ... p[i-1]"      otherwise
+    //      shortcut: p[i] = points[i] + ", "
+    while (i < finiteSet.size()) {
+      sb.append(finiteSet.get(i)).append(", ");
+      i++;
+    }
+
+    sb.replace(sb.length() - 2, sb.length(), "}");
+    return sb.toString();
   }
 
   /**

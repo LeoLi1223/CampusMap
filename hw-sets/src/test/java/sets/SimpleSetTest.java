@@ -24,8 +24,12 @@ public class SimpleSetTest {
   /** Tests converting a set to a string. */
   @Test
   public void testToString() {
-    // TODO: implement this
-    
+    assertEquals("{}", S.toString()); // empty set
+    assertEquals("{1.0}", S1.toString()); // one element
+    assertEquals("{1.0, 2.0, 3.0}", S123.toString()); // many elements
+    assertEquals("R", R.toString()); // set of all real numbers
+    assertEquals("R \\ {1.0}", R1.toString()); // complement of one element
+    assertEquals("R \\ {1.0, 2.0, 3.0}", R123.toString()); // complement of many elements
   }
 
   private static SimpleSet S = new SimpleSet(new float[0]);
