@@ -9,8 +9,24 @@ included each one; if not, explain whether you considered additional classes and
 not to include them.
 
 
-TODO: Your answer here!
+I include an Edge class inside Graph class to represent a directed labeled edge, guaranteeing strong
+consistency in representing edges. I also considered whether to include a Node inner class for the
+consistency, but I decided not to include one because a node is simply a string, and it's unnecessary
+to encapsulate a single string.
 
+For innerclass Edge, there are operations for creating a new edge, getting information of an edge and
+setting the label for an edge. Also, hashcode and equals methods are overridden so that comparing edges
+will have expected behaviors.
+
+For the Graph class, the creator is an indispensable operation to create an empty graph initially. Then,
+nodes and edges should be able to be inserted, and hence, addNode and addEdge methods are included.
+getNode, getChildren and getParents methods are designed for observing existing nodes, and getEdgesFrom
+and getEdgesTo methods are designed for retrieving edges associated with a node. These operations are
+frequently performed in a graph. Remove operations on edges are also necessary for a graph ADT because
+edges are more changeable than nodes in a graph. And thus, I included removeEdge method as well.
+
+With these considered operations, traditional algorithms such as BFS, DFS, path finding algorithms are
+supported. Therefore, I believe they form a sufficient interface to a graph.
 
 ## Part 3
 ###########################################################################

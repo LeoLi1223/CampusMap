@@ -11,10 +11,10 @@
 
 package graph.scriptTestRunner;
 
+import graph.Graph;
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * This class implements a testing driver which reads test scripts
@@ -30,7 +30,7 @@ public class GraphTestDriver {
      * String -> Graph: maps the names of graphs to the actual graph
      **/
     // TODO for the student: Uncomment and parameterize the next line correctly:
-    //private final Map<String, _______> graphs = new HashMap<String, ________>();
+    private final Map<String, Graph> graphs = new HashMap<String, Graph>();
     private final PrintWriter output;
     private final BufferedReader input;
 
@@ -117,8 +117,12 @@ public class GraphTestDriver {
     private void createGraph(String graphName) {
         // TODO Insert your code here.
 
-        // graphs.put(graphName, ___);
-        // output.println(...);
+        if (graphs.containsKey(graphName)) {
+            output.println("not defined");
+        } else {
+            graphs.put(graphName, new Graph());
+            output.println("created graph " + graphName);
+        }
     }
 
     private void addNode(List<String> arguments) {
@@ -135,8 +139,13 @@ public class GraphTestDriver {
     private void addNode(String graphName, String nodeName) {
         // TODO Insert your code here.
 
-        // ___ = graphs.get(graphName);
-        // output.println(...);
+         Graph graph = graphs.get(graphName);
+         if (graph.getNodes().contains(nodeName)) {
+             output.println("not defined");
+         } else {
+             graph.addNode(nodeName);
+             output.println("added node "+ nodeName + " to " + graphName);
+         }
     }
 
     private void addEdge(List<String> arguments) {
@@ -154,10 +163,16 @@ public class GraphTestDriver {
 
     private void addEdge(String graphName, String parentName, String childName,
                          String edgeLabel) {
-        // TODO Insert your code here.
 
-        // ___ = graphs.get(graphName);
-        // output.println(...);
+        Graph graph = graphs.get(graphName);
+        if (!graph.getNodes().contains(parentName) || !graph.getNodes().contains(childName)) {
+            output.println("not defined");
+        } else if (graph.getEdgesFrom(parentName).contains(new Graph.Edge(parentName, childName, edgeLabel))) {
+            output.println("not defined");
+        } else {
+            graph.addEdge(new Graph.Edge(parentName, childName, edgeLabel));
+            output.println("added edge " + edgeLabel + " from " + parentName + " to " + childName + " in " + graphName);
+        }
     }
 
     private void listNodes(List<String> arguments) {
@@ -170,10 +185,14 @@ public class GraphTestDriver {
     }
 
     private void listNodes(String graphName) {
-        // TODO Insert your code here.
-
-        // ___ = graphs.get(graphName);
-        // output.println(...);
+        String head = "graphName contains:";
+        Graph graph = graphs.get(graphName);
+        List<String> nodes = graph.getNodes();
+        Collections.sort(nodes);
+        for (String name : nodes) {
+            head += " " + name;
+        }
+        output.println(head);
     }
 
     private void listChildren(List<String> arguments) {
@@ -187,10 +206,20 @@ public class GraphTestDriver {
     }
 
     private void listChildren(String graphName, String parentName) {
-        // TODO Insert your code here.
-
-        // ___ = graphs.get(graphName);
-        // output.println(...);
+        String head = "the children of " + parentName + " in " + graphName + " are:";
+        Graph graph = graphs.get(graphName);
+        List<Graph.Edge> edgesFrom = graph.getEdgesFrom(parentName);
+        edgesFrom.sort((o1, o2) -> {
+            int compareLabel = o1.getLabel().compareTo(o2.getLabel());
+            int compareChild = o1.getChild().compareTo(o2.getChild());
+            return compareChild != 0 ? compareChild : compareLabel;
+        });
+        for (Graph.Edge edge : edgesFrom) {
+            String child = edge.getChild();
+            String label = edge.getLabel();
+            head += " " + child + "(" + label + ")";
+        }
+        output.println(head);
     }
 
     /**
