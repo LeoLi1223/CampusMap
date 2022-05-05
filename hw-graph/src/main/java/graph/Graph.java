@@ -117,51 +117,6 @@ public class Graph {
     }
 
     /**
-     * A Node represents a mutable node that can be added into the graph.
-     * A typical node has a value.
-     */
-//     public static class Node {
-//        /**
-//         * Construct a new Node instance.
-//         * @param value value for the new node
-//         * @spec.requires value != null
-//         * @spec.effects makes a new node with the given value
-//         */
-//        public Node(String value) {
-//            throw new RuntimeException("Not Yet Implemented");
-//        }
-//
-//        /**
-//         * Return the value associated with the node.
-//         * @return this.value
-//         */
-//        public String getValue() {
-//            throw new RuntimeException("Not Yet Implemented");
-//        }
-//
-//        /**
-//         * Set the node's value to the give value.
-//         * @param newValue the new value for the node
-//         * @spec.requires newValue != null
-//         * @spec.modifies this
-//         * @spec.effects this.value = newValue
-//         */
-//        public void setValue(String newValue) {
-//            throw new RuntimeException("Not Yet Implemented");
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//            throw new RuntimeException("Not Yet Implemented");
-//        }
-//
-//        @Override
-//        public boolean equals(Object obj) {
-//            throw new RuntimeException("Not Yet Implemented");
-//        }
-//    }
-
-    /**
      * An Edge is a mutable directed labeled edge, pointing from a source to a destination.
      * A typical Edge is a pair of nodes (node1, node2) with a label, representing
      * a labeled edge pointing from node1 to node2.
