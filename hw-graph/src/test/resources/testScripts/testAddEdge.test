@@ -1,0 +1,15 @@
+# Tests add an edge between a pair of nodes
+# and prints out the single edge
+
+# Create a graph
+CreateGraph graph1
+
+# Add a pair of nodes
+AddNode graph1 n1
+AddNode graph1 n2
+
+# Add an edge
+AddEdge graph1 n1 n2 e1
+
+# Print the outgoing edges from n1
+ListChildren graph1 n1

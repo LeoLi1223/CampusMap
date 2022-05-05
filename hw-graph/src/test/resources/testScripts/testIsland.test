@@ -1,0 +1,20 @@
+# Tests that a graph contains isolated nodes, all nodes
+# can be printed and all edges from each node can be printed
+
+# Create a graph
+CreateGraph island
+
+# Add nodes
+AddNode island n1
+AddNode island n2
+AddNode island n3
+
+# Add Edges (isolate n3)
+AddEdge island n1 n2 e12
+AddEdge island n2 n1 e21
+
+# print all nodes in the graph and all edges from each node
+ListNodes island
+ListChildren island n1
+ListChildren island n2
+ListChildren island n3

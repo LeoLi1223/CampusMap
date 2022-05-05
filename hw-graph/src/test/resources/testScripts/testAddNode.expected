@@ -1,0 +1,12 @@
+# Tests that a node can be added, one single node can be
+# printed and no edge from the node is printed.
+
+# Create a graph
+created graph graph1
+
+# Add multiple distinct nodes
+added node n1 to graph1
+
+# Print the node in the graph
+ListNodes graph1: n1
+the children of n1 in graph1 are:

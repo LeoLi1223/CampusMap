@@ -34,5 +34,11 @@ supported. Therefore, I believe they form a sufficient interface to a graph.
 What was your testing strategy for this assignment? How do your script tests and JUnit tests
 differ from each other (if they do), and why?
 
-
-TODO: Your answer here!
+My testing strategy is first dividing cases that are going to happen and ones that will not happen, and then
+using "0, 1, 2" case analysis for cases that are going to happen.
+Script tests are restricted to the defined commands and behaviors, so I can only test cases that are going to
+happen in the graph. For example, I tested add 0, 1 or more distinct nodes in a graph and add 0, 1 or more
+distinct edges in a graph because these nodes or edges should be added to the graph.
+For JUnit tests, I tested cases that will not happen or ones that script testing doesn't support. For example,
+I tested adding identical nodes and identical edges into the graph. Also, I can test whether methods are
+throwing exceptions correctly and method of the public inner class Edge inside Graph.

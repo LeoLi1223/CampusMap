@@ -1,0 +1,13 @@
+# Tests add multiple distinct nodes
+# and print the nodes in the graph
+
+# Create a graph
+created graph graph1
+
+# Add multiple distinct nodes
+added node n1 to graph1
+added node n2 to graph1
+added node n3 to graph1
+
+# Print the nodes in the graph
+ListNodes graph1: n1 n2 n3

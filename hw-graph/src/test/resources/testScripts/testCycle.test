@@ -1,0 +1,21 @@
+# Tests that a graph has a cycle in it, all nodes can be
+# printed and all edges can be printed.
+
+# Create a graph
+CreateGraph cycle
+
+# Add nodes
+AddNode cycle n1
+AddNode cycle n2
+AddNode cycle n3
+
+# Add edges
+AddEdge cycle n1 n2 e12
+AddEdge cycle n2 n3 e23
+AddEdge cycle n3 n1 e31
+
+# Print all nodes and edges
+ListNodes cycle
+ListChildren cycle n1
+ListChildren cycle n2
+ListChildren cycle n3
