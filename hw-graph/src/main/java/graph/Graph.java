@@ -1,6 +1,6 @@
 package graph;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * A Graph is a mutable directed labeled graph. A typical Graph consists of
@@ -9,14 +9,36 @@ import java.util.List;
  *      G = (nodes, edges) where nodes = {n1, n2, ...} and edges = {e1, e2, ...}
  */
 public class Graph {
-    // Representation not shown
+    // RI: no null values.
+    //     no identical values in adjacencyList.
+    // AF(this) = a map with nodes of this.adjacencyList.keys and edges of this.adjacencyList.values.
+    private Map<String, List<Edge>> adjacencyList;
+
+    public static final boolean DEBUG = true;
+
+    private void checkRep() {
+        if (DEBUG) {
+            for (String node: adjacencyList.keySet()) {
+                List<Edge> edges = adjacencyList.get(node);
+                for (int i = 0; i < edges.size(); i++) {
+                    if (edges.get(i) == null) {
+                        throw new RuntimeException("Edges cannot be null");
+                    }
+                    if (i != edges.lastIndexOf(edges.get(i))) {
+                        throw new RuntimeException("There cannot be identical edges in the map.");
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Construct a new Graph instance.
      * @spec.effects makes an empty graph.
      */
     public Graph() {
-        throw new RuntimeException("Not Yet Implemented");
+        adjacencyList = new HashMap<>();
+        checkRep();
     }
 
     /**
@@ -27,7 +49,9 @@ public class Graph {
      * @spec.effects add the node to this graph, if no node with this name already exists in this graph
      */
     public void addNode(String node) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        adjacencyList.put(node, new LinkedList<>());
+        checkRep();
     }
 
     /**
@@ -38,7 +62,14 @@ public class Graph {
      * @spec.effects add the edge to this graph, if no edge with the same label has the same parent and child nodes
      */
     public void addEdge(Edge edge) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+
+        String parent = edge.getParent();
+        if (!adjacencyList.get(parent).contains(edge)) {
+            adjacencyList.get(parent).add(edge);
+        }
+
+        checkRep();
     }
 
     /**
@@ -46,7 +77,7 @@ public class Graph {
      * @return all nodes in this graph
      */
     public List<String> getNodes() {
-        throw new RuntimeException("Not Yet Implemented");
+        return List.copyOf(adjacencyList.keySet());
     }
 
     /**
@@ -57,7 +88,15 @@ public class Graph {
      * @return all child nodes of the given parent node
      */
     public List<String> getChildren(String parent) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        if (!adjacencyList.containsKey(parent)) {
+            throw new NoSuchElementException("The given parent node doesn't exist in the map");
+        }
+        List<String> children = new ArrayList<>();
+        for (Edge edge : adjacencyList.get(parent)) {
+            children.add(edge.getChild());
+        }
+        return children;
     }
 
     /**
@@ -68,7 +107,20 @@ public class Graph {
      * @return all parent nodes of the given child node
      */
     public List<String> getParents(String child) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        if (!adjacencyList.containsKey(child)) {
+            throw new NoSuchElementException("The given child node doesn't exist in the map");
+        }
+        List<String> parents = new ArrayList<>();
+
+        List<Edge> edgesTo = getEdgesTo(child);
+        for (Edge edge: edgesTo) {
+            if (!parents.contains(edge.getParent())) {
+                parents.add(edge.getParent());
+            }
+        }
+
+        return parents;
     }
 
     /**
@@ -80,7 +132,20 @@ public class Graph {
      * @return a list of edges from the parent node to the child node
      */
     public List<Edge> getEdges(String parent, String child) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        if (!adjacencyList.containsKey(parent)) {
+            throw new NoSuchElementException("The given parent node doesn't exist in the map");
+        }
+        if (!adjacencyList.containsKey(child)) {
+            throw new NoSuchElementException("The given child node doesn't exist in the map");
+        }
+        List<Edge> edges = new ArrayList<>();
+        for (Edge edge: adjacencyList.get(parent)) {
+            if (edge.getChild().equals(child)) {
+                edges.add(edge);
+            }
+        }
+        return edges;
     }
 
     /**
@@ -91,7 +156,11 @@ public class Graph {
      * @return a list of edges starting from the given node
      */
     public List<Edge> getEdgesFrom(String node) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        if (!adjacencyList.containsKey(node)) {
+            throw new NoSuchElementException("The given node doesn't exist in the map");
+        }
+        return adjacencyList.get(node);
     }
 
     /**
@@ -102,7 +171,21 @@ public class Graph {
      * @return a list of edges pointing to the given node
      */
     public List<Edge> getEdgesTo(String node) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        if (!adjacencyList.containsKey(node)) {
+            throw new NoSuchElementException("The given child node doesn't exist in the map");
+        }
+        List<Edge> edges = new ArrayList<>();
+        for (String parent: adjacencyList.keySet()) {
+            if (!parent.equals(node)) {
+                for (Edge edge : adjacencyList.get(parent)) {
+                    if (edge.getChild().equals(node)) {
+                        edges.add(edge);
+                    }
+                }
+            }
+        }
+        return edges;
     }
 
     /**
@@ -113,7 +196,9 @@ public class Graph {
      * @spec.effects remove the same edge in the graph, if exists
      */
     public void removeEdge(Edge edge) {
-        throw new RuntimeException("Not Yet Implemented");
+        checkRep();
+        adjacencyList.get(edge.getParent()).remove(edge);
+        checkRep();
     }
 
     /**
@@ -122,6 +207,12 @@ public class Graph {
      * a labeled edge pointing from node1 to node2.
      */
      public static class Edge {
+        // RI: parent != null && child != null && label != null
+        // AF(this) = an edge from parent to child with label
+
+        private String parent;
+        private String child;
+        private String label;
 
         /**
          * Construct a new Edge instance.
@@ -132,7 +223,15 @@ public class Graph {
          * @spec.effects make a new edge from start to end with the given label
          */
         public Edge(String parent, String child, String label) {
-            throw new RuntimeException("Not Yet Implemented");
+            this.parent = parent;
+            this.child = child;
+            this.label = label;
+        }
+
+        private void checkRep() {
+            if (parent == null || child == null || label == null) {
+                throw new RuntimeException("Illegal edge occurs");
+            }
         }
 
         /**
@@ -140,7 +239,7 @@ public class Graph {
          * @return this.parent
          */
         public String getParent() {
-            throw new RuntimeException("Not Yet Implemented");
+            return parent;
         }
 
         /**
@@ -148,7 +247,7 @@ public class Graph {
          * @return this.child
          */
         public String getChild() {
-            throw new RuntimeException("Not Yet Implemented");
+            return child;
         }
 
         /**
@@ -156,7 +255,7 @@ public class Graph {
          * @return this.label
          */
         public String getLabel() {
-            throw new RuntimeException("Not Yet Implemented");
+            return label;
         }
 
         /**
@@ -167,17 +266,23 @@ public class Graph {
          * @spec.effects this.label = newLabel
          */
         public void setLabel(String newLabel) {
-            throw new RuntimeException("Not Yet Implemented");
+            checkRep();
+            this.label = newLabel;
+            checkRep();
         }
 
         @Override
         public int hashCode() {
-            throw new RuntimeException("Not Yet Implemented");
+            return parent.hashCode() ^ child.hashCode() ^ label.hashCode();
         }
 
         @Override
         public boolean equals(Object obj) {
-            throw new RuntimeException("Not Yet Implemented");
+            if (! (obj instanceof Edge)) {
+                return false;
+            }
+            Edge e = (Edge) obj;
+            return parent.equals(e.parent) && child.equals(e.child) && label.equals(e.label);
         }
     }
 }
