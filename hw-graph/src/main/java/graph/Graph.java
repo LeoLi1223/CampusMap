@@ -9,9 +9,9 @@ import java.util.*;
  *      G = (nodes, edges) where nodes = {n1, n2, ...} and edges = {e1, e2, ...}
  */
 public class Graph {
-    // RI: no null values.
-    //     no identical values in adjacencyList.
-    // AF(this) = a map with nodes of this.adjacencyList.keys and edges of this.adjacencyList.values.
+    // RI:  adjacencyList != null
+    //      no null values and no identical values in adjacencyList.
+    // AF(this) = a graph with nodes of this.adjacencyList.keys and edges of this.adjacencyList.values.
     private Map<String, List<Edge>> adjacencyList;
 
     public static final boolean DEBUG = true;
@@ -44,7 +44,7 @@ public class Graph {
     /**
      * Add a node to the graph.
      * @param node the new node being added to this graph
-     * @spec.requires nodeName != null
+     * @spec.requires node != null
      * @spec.modifies this
      * @spec.effects add the node to this graph, if no node with this name already exists in this graph
      */
@@ -73,8 +73,8 @@ public class Graph {
     }
 
     /**
-     * Returns a list of node in the graph.
-     * @return all nodes in this graph
+     * Returns an unmodifiable list of node in the graph.
+     * @return an unmodifiable list of node in the graph
      */
     public List<String> getNodes() {
         return List.copyOf(adjacencyList.keySet());
@@ -202,7 +202,7 @@ public class Graph {
     }
 
     /**
-     * An Edge is a mutable directed labeled edge, pointing from a source to a destination.
+     * An Edge is an immutable directed, labeled edge, pointing from a source to a destination.
      * A typical Edge is a pair of nodes (node1, node2) with a label, representing
      * a labeled edge pointing from node1 to node2.
      */
@@ -210,9 +210,9 @@ public class Graph {
         // RI: parent != null && child != null && label != null
         // AF(this) = an edge from parent to child with label
 
-        private String parent;
-        private String child;
-        private String label;
+        private final String parent;
+        private final String child;
+        private final String label;
 
         /**
          * Construct a new Edge instance.
@@ -256,19 +256,6 @@ public class Graph {
          */
         public String getLabel() {
             return label;
-        }
-
-        /**
-         * Set the label of this edge to the given label.
-         * @param newLabel the new label for this edge
-         * @spec.requires newLabel != null
-         * @spec.modifies this
-         * @spec.effects this.label = newLabel
-         */
-        public void setLabel(String newLabel) {
-            checkRep();
-            this.label = newLabel;
-            checkRep();
         }
 
         @Override
