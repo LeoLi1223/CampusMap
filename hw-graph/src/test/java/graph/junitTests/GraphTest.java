@@ -132,14 +132,6 @@ public class GraphTest {
         graph.getEdgesTo("not exist");
     }
 
-    /**
-     * Tests that checkRep throws a RuntimeException when adding null to the map.
-     */
-    @Test(expected = RuntimeException.class)
-    public void testCheckRepNull() {
-        graph.addEdge(null);
-    }
-
     // -------------------------------------------------------
     // Following tests are unit tests for the inner class Edge
 
@@ -186,9 +178,9 @@ public class GraphTest {
     }
 
     /**
-     * Tests that checkRep throws a RuntimeException when a parameter of an edge is null.
+     * Tests that checkRep throws a AssertionError when a parameter of an edge is null.
      */
-    @Test(expected = RuntimeException.class)
+    @Test(expected = AssertionError.class)
     public void testCheckRepEdge() {
         Graph.Edge edge = new Graph.Edge(null, N1, "error");
     }

@@ -21,12 +21,8 @@ public class Graph {
             for (String node: adjacencyList.keySet()) {
                 List<Edge> edges = adjacencyList.get(node);
                 for (int i = 0; i < edges.size(); i++) {
-                    if (edges.get(i) == null) {
-                        throw new RuntimeException("Edges cannot be null");
-                    }
-                    if (i != edges.lastIndexOf(edges.get(i))) {
-                        throw new RuntimeException("There cannot be identical edges in the map.");
-                    }
+                    assert edges.get(i) != null : "Edges cannot be null";
+                    assert i == edges.lastIndexOf(edges.get(i)) : "There cannot be identical edges in the map";
                 }
             }
         }
@@ -240,9 +236,7 @@ public class Graph {
         }
 
         private void checkRep() {
-            if (parent == null || child == null || label == null) {
-                throw new RuntimeException("Illegal edge arguments");
-            }
+            assert parent != null && child != null && label != null : "Illegal edge arguments";
         }
 
         /**
