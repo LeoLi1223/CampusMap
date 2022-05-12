@@ -17,6 +17,12 @@ A few examples of possible Graph representations:
 representations listed above (for example, in terms of runtime complexity, space
 complexity, or ease of implementation).
 
+Representation A has O(1) runtime complexity for adding a node or an edge, but finding edges from/to a
+certain node runs in O(E) time.
+Using an adjacency list also has O(1) runtime complexity for adding a node or an edge. It also benefits
+finding edges from a certain node, but finding edges to a certain node runs in O(E) time.
+Using an adjacency matrix, finding edges operations can be done in O(1) runtime complexity, but adding a
+node requires to resize the two-dimensional matrix which runs in O(V^2).
 
 
 
@@ -24,6 +30,11 @@ complexity, or ease of implementation).
 chose it. If you chose to use a different representation than one of the three we described
 above, be sure to list its advantages and disadvantages, too.
 
+I choose to use the adjacency list. First off, I can use a HashMap to implement the adjacency
+list where keys are node and values are edges from that node. Using a well-established data
+structure is safer and more efficient. Also, adding nodes and edges, removing edges, finding
+nodes and edges are benefit from the HashMap. The only drawback  supported by my implementation
+is to find edges pointing to a certain node.
 
 
 
@@ -34,12 +45,14 @@ above, be sure to list its advantages and disadvantages, too.
 
 1. Describe any new tests you added and why you added them, or why you feel that your original
 tests alone are sufficient.
-
+I added tests for removing a specific edge since the original tests didn't include these tests.
 
 
 
 2. Did you make any changes to your specifications as you were implementing your Graph? (yes/no)
 If yes, describe your changes and why you made them.
-
-
-
+Yes.
+I changed the Edge class to be immutable because
+* it's unnecessary to change the label of an edge between two certain nodes.
+  Instead, clients can add an edge with the new label between them.
+* Making Edge immutable will prevent representation exposure on edges when returning a list of edges.
