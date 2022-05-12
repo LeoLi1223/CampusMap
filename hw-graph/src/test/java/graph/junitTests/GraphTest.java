@@ -60,6 +60,9 @@ public class GraphTest {
         assertEquals(Arrays.asList(E12), graph.getEdges(N1, N2));
     }
 
+    /**
+     * Tests that removeEdge removes an edge that exists in the graph.
+     */
     @Test
     public void testRemoveEdgeExist() {
         graph.addNode(N1);
@@ -71,13 +74,15 @@ public class GraphTest {
         assertEquals(Arrays.asList(E12_new), graph.getEdges(N1, N2));
     }
 
+    /**
+     * Tests that removeEdge does nothing when the edge doesn't exist in the graph.
+     */
     @Test
     public void testRemoveEdge2NotExist() {
         graph.addNode(N1);
         graph.addNode(N2);
 
         graph.removeEdge(E12);
-
         assertEquals(new ArrayList<>(), graph.getEdges(N1, N2));
     }
 
@@ -87,7 +92,6 @@ public class GraphTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void testGetChildren() {
-        Graph graph = new Graph();
         graph.getChildren("not exist");
     }
 
@@ -97,7 +101,6 @@ public class GraphTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void testGetParents() {
-        Graph graph = new Graph();
         graph.getParents("not exist");
     }
 
@@ -107,7 +110,6 @@ public class GraphTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void testGetEdges() {
-        Graph graph = new Graph();
         graph.addNode(N1);
         graph.getEdges(N1, "not exist either");
     }
@@ -118,7 +120,6 @@ public class GraphTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void testGetEdgesFrom() {
-        Graph graph = new Graph();
         graph.getEdgesFrom("not exist");
     }
 
@@ -128,10 +129,28 @@ public class GraphTest {
      */
     @Test(expected = NoSuchElementException.class)
     public void testGetEdgesTo() {
-        Graph graph = new Graph();
         graph.getEdgesTo("not exist");
     }
 
+    /**
+     * Tests that checkRep throw proper exception when adding null to the map.
+     */
+    @Test(expected = RuntimeException.class)
+    public void testCheckRepNull() {
+        graph.addEdge(null);
+    }
+
+    /**
+     * Tests that checkRep throw proper exception when adding duplicate edges to the map.
+     */
+    @Test(expected = RuntimeException.class)
+    public void testCheckRepDuplicateEdge() {
+        graph.addNode(N1);
+        graph.addNode(N2);
+
+        graph.addEdge(E12);
+        graph.addEdge(E12);
+    }
 
     // -------------------------------------------------------
     // Following tests are unit tests for the inner class Edge
@@ -176,5 +195,10 @@ public class GraphTest {
         Graph.Edge edge3 = new Graph.Edge(N1, N2, "new label");
         assertEquals(edge1, edge2);
         assertNotEquals(edge1, edge3);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testCheckRepEdge() {
+        Graph.Edge edge = new Graph.Edge(null, N1, "error");
     }
 }
