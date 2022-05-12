@@ -114,14 +114,8 @@ public class GraphTestDriver {
     }
 
     private void createGraph(String graphName) {
-        // TODO Insert your code here.
-
-        if (graphs.containsKey(graphName)) {
-            output.println("not defined");
-        } else {
-            graphs.put(graphName, new Graph());
-            output.println("created graph " + graphName);
-        }
+        graphs.put(graphName, new Graph());
+        output.println("created graph " + graphName);
     }
 
     private void addNode(List<String> arguments) {
@@ -136,15 +130,10 @@ public class GraphTestDriver {
     }
 
     private void addNode(String graphName, String nodeName) {
-        // TODO Insert your code here.
-
         Graph graph = graphs.get(graphName);
-        if (graph.getNodes().contains(nodeName)) {
-            output.println("not defined");
-        } else {
-            graph.addNode(nodeName);
-            output.println("added node "+ nodeName + " to " + graphName);
-        }
+
+        graph.addNode(nodeName);
+        output.println("added node " + nodeName + " to " + graphName);
     }
 
     private void addEdge(List<String> arguments) {
@@ -164,14 +153,9 @@ public class GraphTestDriver {
                          String edgeLabel) {
 
         Graph graph = graphs.get(graphName);
-        if (!graph.getNodes().contains(parentName) || !graph.getNodes().contains(childName)) {
-            output.println("not defined");
-        } else if (graph.getEdgesFrom(parentName).contains(new Graph.Edge(parentName, childName, edgeLabel))) {
-            output.println("not defined");
-        } else {
-            graph.addEdge(new Graph.Edge(parentName, childName, edgeLabel));
-            output.println("added edge " + edgeLabel + " from " + parentName + " to " + childName + " in " + graphName);
-        }
+
+        graph.addEdge(new Graph.Edge(parentName, childName, edgeLabel));
+        output.println("added edge " + edgeLabel + " from " + parentName + " to " + childName + " in " + graphName);
     }
 
     private void listNodes(List<String> arguments) {
@@ -184,11 +168,12 @@ public class GraphTestDriver {
     }
 
     private void listNodes(String graphName) {
-        String head = "graphName contains:";
+        String head = graphName + " contains:";
         Graph graph = graphs.get(graphName);
-        List<String> nodes = graph.getNodes();
-        Collections.sort(nodes);
-        for (String name : nodes) {
+        List<String> nodes = graph.getNodes(); // getNodes() returns an unmodifiable list which cannot be sorted.
+        List<String> copy = new ArrayList<>(nodes);
+        Collections.sort(copy);
+        for (String name : copy) {
             head += " " + name;
         }
         output.println(head);
