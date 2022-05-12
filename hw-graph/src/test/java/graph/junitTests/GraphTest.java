@@ -133,23 +133,11 @@ public class GraphTest {
     }
 
     /**
-     * Tests that checkRep throw proper exception when adding null to the map.
+     * Tests that checkRep throws a RuntimeException when adding null to the map.
      */
     @Test(expected = RuntimeException.class)
     public void testCheckRepNull() {
         graph.addEdge(null);
-    }
-
-    /**
-     * Tests that checkRep throw proper exception when adding duplicate edges to the map.
-     */
-    @Test(expected = RuntimeException.class)
-    public void testCheckRepDuplicateEdge() {
-        graph.addNode(N1);
-        graph.addNode(N2);
-
-        graph.addEdge(E12);
-        graph.addEdge(E12);
     }
 
     // -------------------------------------------------------
@@ -197,6 +185,9 @@ public class GraphTest {
         assertNotEquals(edge1, edge3);
     }
 
+    /**
+     * Tests that checkRep throws a RuntimeException when a parameter of an edge is null.
+     */
     @Test(expected = RuntimeException.class)
     public void testCheckRepEdge() {
         Graph.Edge edge = new Graph.Edge(null, N1, "error");
