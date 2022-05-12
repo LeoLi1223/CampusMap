@@ -3,7 +3,7 @@ package graph;
 import java.util.*;
 
 /**
- * A Graph is a mutable directed labeled graph. A typical Graph consists of
+ * A Graph is a mutable directed, labeled graph. A typical Graph consists of
  * a set of identical nodes, which are represented as strings, and a set of edges.
  * For example,
  *      G = (nodes, edges) where nodes = {n1, n2, ...} and edges = {e1, e2, ...}
@@ -77,6 +77,7 @@ public class Graph {
      * @return an unmodifiable list of node in the graph
      */
     public List<String> getNodes() {
+        checkRep();
         return List.copyOf(adjacencyList.keySet());
     }
 
@@ -96,6 +97,8 @@ public class Graph {
         for (Edge edge : adjacencyList.get(parent)) {
             children.add(edge.getChild());
         }
+
+        checkRep();
         return children;
     }
 
@@ -120,6 +123,7 @@ public class Graph {
             }
         }
 
+        checkRep();
         return parents;
     }
 
@@ -145,6 +149,8 @@ public class Graph {
                 edges.add(edge);
             }
         }
+
+        checkRep();
         return edges;
     }
 
@@ -160,6 +166,8 @@ public class Graph {
         if (!adjacencyList.containsKey(node)) {
             throw new NoSuchElementException("The given node doesn't exist in the map");
         }
+
+        checkRep();
         return adjacencyList.get(node);
     }
 
@@ -185,6 +193,8 @@ public class Graph {
                 }
             }
         }
+
+        checkRep();
         return edges;
     }
 
@@ -226,11 +236,12 @@ public class Graph {
             this.parent = parent;
             this.child = child;
             this.label = label;
+            checkRep();
         }
 
         private void checkRep() {
             if (parent == null || child == null || label == null) {
-                throw new RuntimeException("Illegal edge occurs");
+                throw new RuntimeException("Illegal edge arguments");
             }
         }
 
@@ -239,6 +250,7 @@ public class Graph {
          * @return this.parent
          */
         public String getParent() {
+            checkRep();
             return parent;
         }
 
@@ -247,6 +259,7 @@ public class Graph {
          * @return this.child
          */
         public String getChild() {
+            checkRep();
             return child;
         }
 
@@ -255,20 +268,25 @@ public class Graph {
          * @return this.label
          */
         public String getLabel() {
+            checkRep();
             return label;
         }
 
         @Override
         public int hashCode() {
+            checkRep();
             return parent.hashCode() ^ child.hashCode() ^ label.hashCode();
         }
 
         @Override
         public boolean equals(Object obj) {
+            checkRep();
             if (! (obj instanceof Edge)) {
                 return false;
             }
             Edge e = (Edge) obj;
+
+            checkRep();
             return parent.equals(e.parent) && child.equals(e.child) && label.equals(e.label);
         }
     }
