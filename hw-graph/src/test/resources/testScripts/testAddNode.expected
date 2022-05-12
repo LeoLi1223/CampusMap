@@ -8,5 +8,5 @@ created graph graph1
 added node n1 to graph1
 
 # Print the node in the graph
-ListNodes graph1: n1
+graph1 contains: n1
 the children of n1 in graph1 are:

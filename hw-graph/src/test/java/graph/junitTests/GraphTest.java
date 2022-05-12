@@ -1,9 +1,12 @@
 package graph.junitTests;
 
 import graph.Graph;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
@@ -19,13 +22,20 @@ public class GraphTest {
     private static final Graph.Edge E12 = new Graph.Edge(N1, N2, "e12");
     private static final Graph.Edge E23 = new Graph.Edge(N2, N3, "e23");
     private static final Graph.Edge E31 = new Graph.Edge(N3, N1, "e31");
+    private static final Graph.Edge E12_new = new Graph.Edge(N1, N2, "e12_new");
+
+    private Graph graph;
+
+    @Before
+    public void createGraph() {
+        graph = new Graph();
+    }
 
     /**
      * Tests that no identical nodes can be added to the graph.
      */
     @Test
     public void testAddSameNode() {
-        Graph graph = new Graph();
         graph.addNode(N1);
         graph.addNode(N1);
         graph.addNode(N1);
@@ -37,7 +47,6 @@ public class GraphTest {
      */
     @Test
     public void testAddSameEdge() {
-        Graph graph = new Graph();
         graph.addNode(N1);
         graph.addNode(N2);
 
@@ -45,6 +54,27 @@ public class GraphTest {
         graph.addEdge(E12);
         graph.addEdge(E12);
         assertEquals(Arrays.asList(E12), graph.getEdges(N1, N2));
+    }
+
+    @Test
+    public void testRemoveEdgeExist() {
+        graph.addNode(N1);
+        graph.addNode(N2);
+
+        graph.addEdge(E12);
+        graph.addEdge(E12_new);
+        graph.removeEdge(E12);
+        assertEquals(Arrays.asList(E12_new), graph.getEdges(N1, N2));
+    }
+
+    @Test
+    public void testRemoveEdge2NotExist() {
+        graph.addNode(N1);
+        graph.addNode(N2);
+
+        graph.removeEdge(E12);
+
+        assertEquals(new ArrayList<>(), graph.getEdges(N1, N2));
     }
 
     /**
@@ -98,6 +128,7 @@ public class GraphTest {
         graph.getEdgesTo("not exist");
     }
 
+
     // -------------------------------------------------------
     // Following tests are unit tests for the inner class Edge
 
@@ -129,16 +160,6 @@ public class GraphTest {
         assertEquals("e12", E12.getLabel());
         assertEquals("e23", E23.getLabel());
         assertEquals("e31", E31.getLabel());
-    }
-
-    /**
-     * Tests setLabel method in Graph.Edge.
-     */
-    @Test
-    public void testSetLabel() {
-        Graph.Edge edge = new Graph.Edge(N1, N2, "old label");
-        edge.setLabel("new label");
-        assertEquals("new label", edge.getLabel());
     }
 
     /**

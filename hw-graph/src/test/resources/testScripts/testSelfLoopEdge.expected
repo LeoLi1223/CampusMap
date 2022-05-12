@@ -8,7 +8,7 @@ created graph graph1
 added node n1 to graph1
 
 # Add a self-loop edge
-added edge e1 from n1 to n2 in graph1
+added edge e1 from n1 to n1 in graph1
 
 # Print the outgoing edges from n1
 the children of n1 in graph1 are: n1(e1)
