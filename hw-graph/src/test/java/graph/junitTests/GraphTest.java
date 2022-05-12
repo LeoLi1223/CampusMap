@@ -2,11 +2,12 @@ package graph.junitTests;
 
 import graph.Graph;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
@@ -15,6 +16,9 @@ import static org.junit.Assert.*;
  * The class is for unit tests for Graph class.
  */
 public class GraphTest {
+    @Rule
+    public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds max per method tested
+
     private static final String N1 = "n1";
     private static final String N2 = "n2";
     private static final String N3 = "n3";
