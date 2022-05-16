@@ -29,7 +29,7 @@ public class GraphTestDriver {
     /**
      * String -> Graph: maps the names of graphs to the actual graph
      **/
-    private final Map<String, Graph> graphs = new HashMap<String, Graph>();
+    private final Map<String, Graph<String, String>> graphs = new HashMap<>();
     private final PrintWriter output;
     private final BufferedReader input;
 
@@ -114,7 +114,7 @@ public class GraphTestDriver {
     }
 
     private void createGraph(String graphName) {
-        graphs.put(graphName, new Graph());
+        graphs.put(graphName, new Graph<>());
         output.println("created graph " + graphName);
     }
 
@@ -130,7 +130,7 @@ public class GraphTestDriver {
     }
 
     private void addNode(String graphName, String nodeName) {
-        Graph graph = graphs.get(graphName);
+        Graph<String, String> graph = graphs.get(graphName);
 
         graph.addNode(nodeName);
         output.println("added node " + nodeName + " to " + graphName);
@@ -152,9 +152,9 @@ public class GraphTestDriver {
     private void addEdge(String graphName, String parentName, String childName,
                          String edgeLabel) {
 
-        Graph graph = graphs.get(graphName);
+        Graph<String, String> graph = graphs.get(graphName);
 
-        graph.addEdge(new Graph.Edge(parentName, childName, edgeLabel));
+        graph.addEdge(new Graph.Edge<>(parentName, childName, edgeLabel));
         output.println("added edge " + edgeLabel + " from " + parentName + " to " + childName + " in " + graphName);
     }
 
@@ -169,7 +169,7 @@ public class GraphTestDriver {
 
     private void listNodes(String graphName) {
         String head = graphName + " contains:";
-        Graph graph = graphs.get(graphName);
+        Graph<String, String> graph = graphs.get(graphName);
         List<String> nodes = graph.getNodes(); // getNodes() returns an unmodifiable list which cannot be sorted.
         List<String> copy = new ArrayList<>(nodes);
         Collections.sort(copy);
@@ -191,14 +191,14 @@ public class GraphTestDriver {
 
     private void listChildren(String graphName, String parentName) {
         String head = "the children of " + parentName + " in " + graphName + " are:";
-        Graph graph = graphs.get(graphName);
-        List<Graph.Edge> edgesFrom = graph.getEdgesFrom(parentName);
+        Graph<String, String> graph = graphs.get(graphName);
+        List<Graph.Edge<String, String>> edgesFrom = graph.getEdgesFrom(parentName);
         edgesFrom.sort((o1, o2) -> {
             int compareLabel = o1.getLabel().compareTo(o2.getLabel());
             int compareChild = o1.getChild().compareTo(o2.getChild());
             return compareChild != 0 ? compareChild : compareLabel;
         });
-        for (Graph.Edge edge : edgesFrom) {
+        for (Graph.Edge<String, String> edge : edgesFrom) {
             String child = edge.getChild();
             String label = edge.getLabel();
             head += " " + child + "(" + label + ")";

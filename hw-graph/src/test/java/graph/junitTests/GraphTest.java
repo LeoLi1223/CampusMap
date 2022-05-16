@@ -23,16 +23,16 @@ public class GraphTest {
     private static final String N2 = "n2";
     private static final String N3 = "n3";
 
-    private static final Graph.Edge E12 = new Graph.Edge(N1, N2, "e12");
-    private static final Graph.Edge E23 = new Graph.Edge(N2, N3, "e23");
-    private static final Graph.Edge E31 = new Graph.Edge(N3, N1, "e31");
-    private static final Graph.Edge E12_new = new Graph.Edge(N1, N2, "e12_new");
+    private static final Graph.Edge<String, String> E12 = new Graph.Edge<>(N1, N2, "e12");
+    private static final Graph.Edge<String, String> E23 = new Graph.Edge<>(N2, N3, "e23");
+    private static final Graph.Edge<String, String> E31 = new Graph.Edge<>(N3, N1, "e31");
+    private static final Graph.Edge<String, String> E12_new = new Graph.Edge<>(N1, N2, "e12_new");
 
-    private Graph graph;
+    private Graph<String, String> graph;
 
     @Before
     public void createGraph() {
-        graph = new Graph();
+        graph = new Graph<>();
     }
 
     /**
@@ -170,9 +170,9 @@ public class GraphTest {
      */
     @Test
     public void testEquals() {
-        Graph.Edge edge1 = new Graph.Edge(N1, N2, "old label");
-        Graph.Edge edge2 = new Graph.Edge(N1, N2, "old label");
-        Graph.Edge edge3 = new Graph.Edge(N1, N2, "new label");
+        Graph.Edge<String, String> edge1 = new Graph.Edge<>(N1, N2, "old label");
+        Graph.Edge<String, String> edge2 = new Graph.Edge<>(N1, N2, "old label");
+        Graph.Edge<String, String> edge3 = new Graph.Edge<>(N1, N2, "new label");
         assertEquals(edge1, edge2);
         assertNotEquals(edge1, edge3);
     }
@@ -182,6 +182,6 @@ public class GraphTest {
      */
     @Test(expected = AssertionError.class)
     public void testCheckRepEdge() {
-        Graph.Edge edge = new Graph.Edge(null, N1, "error");
+        Graph.Edge<String, String> edge = new Graph.Edge<>(null, N1, "error");
     }
 }

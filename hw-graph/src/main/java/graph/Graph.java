@@ -7,19 +7,22 @@ import java.util.*;
  * a set of identical nodes, which are represented as strings, and a set of edges.
  * For example,
  *      G = (nodes, edges) where nodes = {n1, n2, ...} and edges = {e1, e2, ...}
+ *
+ * @param <V> the type of nodes.
+ * @param <E> the type of the label of edges.
  */
-public class Graph {
+public class Graph<V, E> {
     // RI:  adjacencyList != null
     //      no null values and no identical values in adjacencyList.
     // AF(this) = a graph with nodes of this.adjacencyList.keys and edges of this.adjacencyList.values.
-    private Map<String, List<Edge>> adjacencyList;
+    private Map<V, List<Edge<V, E>>> adjacencyList;
 
     public static final boolean DEBUG = true;
 
     private void checkRep() {
         if (DEBUG) {
-            for (String node: adjacencyList.keySet()) {
-                List<Edge> edges = adjacencyList.get(node);
+            for (V node: adjacencyList.keySet()) {
+                List<Edge<V, E>> edges = adjacencyList.get(node);
                 for (int i = 0; i < edges.size(); i++) {
                     assert edges.get(i) != null : "Edges cannot be null";
                     assert i == edges.lastIndexOf(edges.get(i)) : "There cannot be identical edges in the map";
@@ -44,7 +47,7 @@ public class Graph {
      * @spec.modifies this
      * @spec.effects add the node to this graph, if no node with this name already exists in this graph
      */
-    public void addNode(String node) {
+    public void addNode(V node) {
         checkRep();
         adjacencyList.put(node, new LinkedList<>());
         checkRep();
@@ -57,10 +60,10 @@ public class Graph {
      * @spec.modifies this
      * @spec.effects add the edge to this graph, if no edge with the same label has the same parent and child nodes
      */
-    public void addEdge(Edge edge) {
+    public void addEdge(Edge<V, E> edge) {
         checkRep();
 
-        String parent = edge.getParent();
+        V parent = edge.getParent();
         if (!adjacencyList.get(parent).contains(edge)) {
             adjacencyList.get(parent).add(edge);
         }
@@ -72,7 +75,7 @@ public class Graph {
      * Returns an unmodifiable list of node in the graph.
      * @return an unmodifiable list of node in the graph
      */
-    public List<String> getNodes() {
+    public List<V> getNodes() {
         checkRep();
         return List.copyOf(adjacencyList.keySet());
     }
@@ -84,13 +87,13 @@ public class Graph {
      * @throws java.util.NoSuchElementException if the parent node doesn't exist in this graph
      * @return all child nodes of the given parent node
      */
-    public List<String> getChildren(String parent) {
+    public List<V> getChildren(V parent) {
         checkRep();
         if (!adjacencyList.containsKey(parent)) {
             throw new NoSuchElementException("The given parent node doesn't exist in the map");
         }
-        List<String> children = new ArrayList<>();
-        for (Edge edge : adjacencyList.get(parent)) {
+        List<V> children = new ArrayList<>();
+        for (Edge<V, E> edge : adjacencyList.get(parent)) {
             children.add(edge.getChild());
         }
 
@@ -105,15 +108,15 @@ public class Graph {
      * @throws java.util.NoSuchElementException if the child node doesn't exist in this graph
      * @return all parent nodes of the given child node
      */
-    public List<String> getParents(String child) {
+    public List<V> getParents(V child) {
         checkRep();
         if (!adjacencyList.containsKey(child)) {
             throw new NoSuchElementException("The given child node doesn't exist in the map");
         }
-        List<String> parents = new ArrayList<>();
+        List<V> parents = new ArrayList<>();
 
-        List<Edge> edgesTo = getEdgesTo(child);
-        for (Edge edge: edgesTo) {
+        List<Edge<V, E>> edgesTo = getEdgesTo(child);
+        for (Edge<V, E> edge: edgesTo) {
             if (!parents.contains(edge.getParent())) {
                 parents.add(edge.getParent());
             }
@@ -131,7 +134,7 @@ public class Graph {
      * @throws java.util.NoSuchElementException if the child or parent doesn't exist in this graph
      * @return a list of edges from the parent node to the child node
      */
-    public List<Edge> getEdges(String parent, String child) {
+    public List<Edge<V, E>> getEdges(V parent, V child) {
         checkRep();
         if (!adjacencyList.containsKey(parent)) {
             throw new NoSuchElementException("The given parent node doesn't exist in the map");
@@ -139,8 +142,8 @@ public class Graph {
         if (!adjacencyList.containsKey(child)) {
             throw new NoSuchElementException("The given child node doesn't exist in the map");
         }
-        List<Edge> edges = new ArrayList<>();
-        for (Edge edge: adjacencyList.get(parent)) {
+        List<Edge<V, E>> edges = new ArrayList<>();
+        for (Edge<V, E> edge: adjacencyList.get(parent)) {
             if (edge.getChild().equals(child)) {
                 edges.add(edge);
             }
@@ -157,7 +160,7 @@ public class Graph {
      * @throws java.util.NoSuchElementException if the node doesn't exist in this graph
      * @return a list of edges starting from the given node
      */
-    public List<Edge> getEdgesFrom(String node) {
+    public List<Edge<V, E>> getEdgesFrom(V node) {
         checkRep();
         if (!adjacencyList.containsKey(node)) {
             throw new NoSuchElementException("The given node doesn't exist in the map");
@@ -174,15 +177,15 @@ public class Graph {
      * @throws java.util.NoSuchElementException if the node doesn't exist in this graph
      * @return a list of edges pointing to the given node
      */
-    public List<Edge> getEdgesTo(String node) {
+    public List<Edge<V, E>> getEdgesTo(V node) {
         checkRep();
         if (!adjacencyList.containsKey(node)) {
             throw new NoSuchElementException("The given child node doesn't exist in the map");
         }
-        List<Edge> edges = new ArrayList<>();
-        for (String parent: adjacencyList.keySet()) {
+        List<Edge<V, E>> edges = new ArrayList<>();
+        for (V parent: adjacencyList.keySet()) {
             if (!parent.equals(node)) {
-                for (Edge edge : adjacencyList.get(parent)) {
+                for (Edge<V, E> edge : adjacencyList.get(parent)) {
                     if (edge.getChild().equals(node)) {
                         edges.add(edge);
                     }
@@ -201,7 +204,7 @@ public class Graph {
      * @spec.modifies this
      * @spec.effects remove the same edge in the graph, if exists
      */
-    public void removeEdge(Edge edge) {
+    public void removeEdge(Edge<V, E> edge) {
         checkRep();
         adjacencyList.get(edge.getParent()).remove(edge);
         checkRep();
@@ -211,14 +214,16 @@ public class Graph {
      * An Edge is an immutable directed, labeled edge, pointing from a source to a destination.
      * A typical Edge is a pair of nodes (node1, node2) with a label, representing
      * a labeled edge pointing from node1 to node2.
+     * @param <V> the type of nodes on the ends of an edge.
+     * @param <E> the type of the label of an edge.
      */
-     public static class Edge {
+     public static class Edge<V, E> {
         // RI: parent != null && child != null && label != null
         // AF(this) = an edge from parent to child with label
 
-        private final String parent;
-        private final String child;
-        private final String label;
+        private final V parent;
+        private final V child;
+        private final E label;
 
         /**
          * Construct a new Edge instance.
@@ -228,7 +233,7 @@ public class Graph {
          * @spec.requires source != null &amp;&amp; dest != null &amp;&amp; label != null
          * @spec.effects make a new edge from start to end with the given label
          */
-        public Edge(String parent, String child, String label) {
+        public Edge(V parent, V child, E label) {
             this.parent = parent;
             this.child = child;
             this.label = label;
@@ -243,7 +248,7 @@ public class Graph {
          * Return the parent node of this edge.
          * @return this.parent
          */
-        public String getParent() {
+        public V getParent() {
             checkRep();
             return parent;
         }
@@ -252,7 +257,7 @@ public class Graph {
          * Return the child node of this edge.
          * @return this.child
          */
-        public String getChild() {
+        public V getChild() {
             checkRep();
             return child;
         }
@@ -261,7 +266,7 @@ public class Graph {
          * Return the label of this edge.
          * @return this.label
          */
-        public String getLabel() {
+        public E getLabel() {
             checkRep();
             return label;
         }
@@ -275,10 +280,10 @@ public class Graph {
         @Override
         public boolean equals(Object obj) {
             checkRep();
-            if (! (obj instanceof Edge)) {
+            if (! (obj instanceof Edge<?, ?>)) {
                 return false;
             }
-            Edge e = (Edge) obj;
+            Edge<?, ?> e = (Edge<?, ?>) obj;
 
             checkRep();
             return parent.equals(e.parent) && child.equals(e.child) && label.equals(e.label);
