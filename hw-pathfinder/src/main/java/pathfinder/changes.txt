@@ -1,2 +1,10 @@
 Briefly list any changes you made to your graph class during hw-pathfinder, and why you made those changes.
-
+1. Change the Graph class to be Graph<V, E> where V is the type of nodes and E is the type of labels.
+2. Change the Graph.Edge class to be Graph.Edge<V, E> where V is the type of nodes and E is the type of labels.
+3. On line 15 in Graph.java, change the types of the adjacencyList to be keys of V and values of Edge<V, E>.
+4. Change the return types of methods in Graph<V, E> and Graph.Edge<V, E> class to be generic type.
+5. Change the initialization of the Graph in JUnit tests to be Graph<String, String> since Graph class now needs
+   two generic types for nodes and labels now.
+6. Change the initialization of the Graph.Edge in JUnit tests to be Graph.Edge<String, String> since Graph.Edge
+   needs two generic types for nodes and labels now.
+7.

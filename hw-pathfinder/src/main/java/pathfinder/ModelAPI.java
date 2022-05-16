@@ -66,7 +66,7 @@ public interface ModelAPI {
      *                                  {@literal null}, or not valid short names of buildings in
      *                                  this campus map.
      */
-    public Path findShortestPath(String startShortName, String endShortName);
+    public <V> Path<V> findShortestPath(String startShortName, String endShortName);
     // You'll need to change this return type to use the generic Path once you've
     // updated the Path ADT to be generic.
 

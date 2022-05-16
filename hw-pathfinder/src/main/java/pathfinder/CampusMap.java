@@ -36,7 +36,7 @@ public class CampusMap implements ModelAPI {
     }
 
     @Override
-    public Path findShortestPath(String startShortName, String endShortName) {
+    public <V> Path<V> findShortestPath(String startShortName, String endShortName) {
         // TODO: Implement this method exactly as it is specified in ModelAPI
         throw new RuntimeException("Not Implemented Yet");
     }
