@@ -20,6 +20,7 @@ public class Graph<V, E> {
     public static final boolean DEBUG = true;
 
     private void checkRep() {
+        assert adjacencyList != null : "the adjacency list cannot be null.";
         if (DEBUG) {
             for (V node: adjacencyList.keySet()) {
                 List<Edge<V, E>> edges = adjacencyList.get(node);
@@ -49,7 +50,9 @@ public class Graph<V, E> {
      */
     public void addNode(V node) {
         checkRep();
-        adjacencyList.put(node, new LinkedList<>());
+        if (!adjacencyList.containsKey(node)) {
+            adjacencyList.put(node, new LinkedList<>());
+        }
         checkRep();
     }
 
