@@ -12,19 +12,17 @@ import java.util.*;
  */
 public class TaskSorter {
 
-    // TODO: Enter private Graph field here with description
     // nodes of Graphs should be Task objects,
     // and edges should be Dependency objects.
     // You don't have to write an abstraction function or
     // representation invariant for this class.
+    private Graph<Task, Dependency> dependencyGraph;
 
     /**
      * Creates a new TaskSorter object with no added tasks or dependencies.
      */
     public TaskSorter() {
-        // TODO: Implement creating an empty graph.
-
-        throw new RuntimeException("not yet implemented");
+        this.dependencyGraph = new Graph<>();
     }
 
     /**
@@ -35,10 +33,7 @@ public class TaskSorter {
      * @spec.requires t != null
      */
     public void addTask(Task t) {
-        // TODO: Implement adding a Task as a node.
-        //       Do nothing if the task exists already.
-
-        throw new RuntimeException("not yet implemented");
+        dependencyGraph.addNode(t);
     }
 
     /**
@@ -46,9 +41,8 @@ public class TaskSorter {
      * @return A set of all tasks in this TaskSorter.
      */
     public Set<Task> getTasks() {
-        // TODO: Implement getting all the tasks (nodes) in the graph.
-
-        throw new RuntimeException("not yet implemented");
+        List<Task> nodes = dependencyGraph.getNodes();
+        return new HashSet<>(nodes);
     }
 
     /**
@@ -63,12 +57,9 @@ public class TaskSorter {
         Task before = dep.getBeforeTask();
         Task after = dep.getAfterTask();
 
-        // TODO: Implement adding a Dependency as an edge.
-        //       Do nothing if the same dependency exists already.
         // NOTE: The edge should go from "before" to "after"!
         //       The tests will not pass if the edges are the other way.
-
-        throw new RuntimeException("not yet implemented");
+        dependencyGraph.addEdge(new Graph.Edge<>(before, after, dep));
     }
 
     /**
@@ -80,11 +71,12 @@ public class TaskSorter {
      * @return set of dependencies with {@code t} as the "before" task
      */
     public Set<Dependency> getOutgoingDependencies(Task t) {
-        // TODO: Implement getting the dependencies that point to the tasks
-        //       depending on the given Task (in other words, get the edges
-        //       to a node's children in the graph)
-
-        throw new RuntimeException("not yet implemented");
+        List<Graph.Edge<Task, Dependency>> tasksFrom = dependencyGraph.getEdgesFrom(t);
+        Set<Dependency> dependenciesFrom = new HashSet<>();
+        for (Graph.Edge<Task, Dependency> edge : tasksFrom) {
+            dependenciesFrom.add(edge.getLabel());
+        }
+        return dependenciesFrom;
     }
 
     /**
