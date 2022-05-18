@@ -1,0 +1,10 @@
+# tests that a path from a node to itself
+
+CreateGraph graph1
+
+AddNode graph1 A
+AddNode graph1 B
+
+AddEdge graph1 A B 5.0
+
+FindPath graph1 A A

@@ -1,0 +1,10 @@
+# tests that the both nodes don't exists in the graph
+
+CreateGraph graph1
+
+AddNode graph1 B
+AddNode graph1 C
+
+AddEdge graph1 B C 10.0
+
+FindPath graph1 A D

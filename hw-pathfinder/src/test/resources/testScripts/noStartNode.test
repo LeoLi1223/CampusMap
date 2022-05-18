@@ -1,0 +1,13 @@
+# tests that the start node doesn't exists in the graph
+
+CreateGraph graph1
+
+AddNode graph1 B
+AddNode graph1 C
+AddNode graph1 D
+
+AddEdge graph1 B C 5.0
+AddEdge graph1 C D 10.0
+AddEdge graph1 B D 2.0
+
+FindPath graph1 A D

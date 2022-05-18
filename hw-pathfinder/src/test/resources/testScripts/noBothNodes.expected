@@ -1,0 +1,11 @@
+# tests that the both nodes don't exists in the graph
+
+created graph graph1
+
+added node B to graph1
+added node C to graph1
+
+added edge 10.000 from B to C in graph1
+
+unknown: A
+unknown: D

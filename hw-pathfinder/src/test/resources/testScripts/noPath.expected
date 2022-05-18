@@ -1,0 +1,13 @@
+# tests that no path from start node to end node is found
+# and that "no path found" can be printed
+
+created graph graph1
+
+added node A to graph1
+added node B to graph1
+added node C to graph1
+
+added edge 5.000 from A to B in graph1
+
+path from A to C:
+no path found

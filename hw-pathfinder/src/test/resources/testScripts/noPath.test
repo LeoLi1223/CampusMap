@@ -1,0 +1,12 @@
+# tests that no path from start node to end node is found
+# and that "no path found" can be printed
+
+CreateGraph graph1
+
+AddNode graph1 A
+AddNode graph1 B
+AddNode graph1 C
+
+AddEdge graph1 A B 5.0
+
+FindPath graph1 A C
