@@ -11,34 +11,81 @@
 
 package pathfinder;
 
+import graph.Graph;
 import pathfinder.datastructures.Path;
+import pathfinder.datastructures.Point;
+import pathfinder.parser.CampusBuilding;
+import pathfinder.parser.CampusPath;
+import pathfinder.parser.CampusPathsParser;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CampusMap implements ModelAPI {
+    private Graph<Point, Double> campusMap;
+    private Map<String, CampusBuilding> shortNameToBuilding;
+
+    public CampusMap() {
+        List<CampusBuilding> buildings = CampusPathsParser.parseCampusBuildings("campus_buildings.csv");
+        List<CampusPath> paths = CampusPathsParser.parseCampusPaths("campus_paths.csv");
+        this.campusMap = new Graph<>();
+        this.shortNameToBuilding = new HashMap<>();
+        // Construct the graph of the campus.
+        for (CampusBuilding building : buildings) {
+            Point newNode = new Point(building.getX(), building.getY());
+            campusMap.addNode(newNode);
+            // store short names to corresponding CampusBuilding information.
+            String shortName = building.getShortName();
+            shortNameToBuilding.put(shortName, building);
+        }
+        for (CampusPath path : paths) {
+            Point node1 = new Point(path.getX1(), path.getY1());
+            Point node2 = new Point(path.getX2(), path.getY2());
+            campusMap.addNode(node1);
+            campusMap.addNode(node2);
+            campusMap.addEdge(new Graph.Edge<>(node1, node2, path.getDistance()));
+        }
+
+    }
 
     @Override
     public boolean shortNameExists(String shortName) {
-        // TODO: Implement this method exactly as it is specified in ModelAPI
-        throw new RuntimeException("Not Implemented Yet");
+        return shortNameToBuilding.containsKey(shortName);
     }
 
     @Override
     public String longNameForShort(String shortName) {
-        // TODO: Implement this method exactly as it is specified in ModelAPI
-        throw new RuntimeException("Not Implemented Yet");
+        if (!shortNameExists(shortName)) {
+            throw new IllegalArgumentException("the short name provided does not exist.");
+        }
+        return shortNameToBuilding.get(shortName).getLongName();
     }
 
     @Override
     public Map<String, String> buildingNames() {
-        // TODO: Implement this method exactly as it is specified in ModelAPI
-        throw new RuntimeException("Not Implemented Yet");
+        Map<String, String> namesMap = new HashMap<>();
+        for (String shortName: shortNameToBuilding.keySet()) {
+            namesMap.put(shortName, shortNameToBuilding.get(shortName).getLongName());
+        }
+
+        return namesMap;
     }
 
     @Override
-    public <V> Path<V> findShortestPath(String startShortName, String endShortName) {
-        // TODO: Implement this method exactly as it is specified in ModelAPI
-        throw new RuntimeException("Not Implemented Yet");
+    public Path<Point> findShortestPath(String startShortName, String endShortName) {
+        if (startShortName == null || endShortName == null) {
+            throw new IllegalArgumentException("building names cannot be null");
+        }
+        if (!shortNameExists(startShortName) || !shortNameExists(endShortName)) {
+            throw new IllegalArgumentException("the short name provided does not exist.");
+        }
+        // convert short names to Points
+        Point start = new Point(shortNameToBuilding.get(startShortName).getX(),
+                                shortNameToBuilding.get(startShortName).getY());
+        Point end = new Point(shortNameToBuilding.get(endShortName).getX(),
+                                shortNameToBuilding.get(endShortName).getY());
+        return ShortestPath.dijkstra(campusMap, start, end);
     }
 
 }
