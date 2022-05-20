@@ -16,6 +16,7 @@ public class ShortestPath {
      * @spec.requires graph != null &amp;&amp; start != null &amp;&amp; end != null
      *                start and end nodes are in the graph.
      * @return  the Path with the lowest cost connecting the two nodes.
+     *          If there is a tie in cost, return any Path with the lowest cost.
      *          Return null if there's no path from start to end.
      */
     public static <V> Path<V> dijkstra(Graph<V, Double> graph, V start, V end) {
