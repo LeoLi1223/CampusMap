@@ -13,7 +13,7 @@ public class ShortestPath {
      * @param start the start node of the path
      * @param end   the destination of the path
      * @param <V>   the type of nodes
-     * @spec.requires graph != null && start != null && end != null
+     * @spec.requires graph != null &amp;&amp; start != null &amp;&amp; end != null
      *                start and end nodes are in the graph.
      * @return  the Path with the lowest cost connecting the two nodes.
      *          Return null if there's no path from start to end.
