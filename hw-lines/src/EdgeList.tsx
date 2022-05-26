@@ -53,7 +53,7 @@ class EdgeList extends Component<EdgeListProps, EdgeListState> {
         let edgeList: string[] = edges.split("\n");
         let line = 1; // keep track of the line number
         for (let edge of edgeList){
-            let props: string[] = edge.split(' ');
+            let props: string[] = edge.split(/\s+/);
             if (props.length !== 5) {
                 alert("Invalid number of arguments the edge on line " + line + "!");
             } else {
