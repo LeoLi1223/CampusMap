@@ -15,18 +15,32 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MapLine from "./MapLine";
 import { UW_LATITUDE_CENTER, UW_LONGITUDE_CENTER } from "./Constants";
+import {ColoredEdge} from "./types";
+import edgeList from "./EdgeList";
 
 // This defines the location of the map. These are the coordinates of the UW Seattle campus
 const position: LatLngExpression = [UW_LATITUDE_CENTER, UW_LONGITUDE_CENTER];
 
 interface MapProps {
-  // TODO: Define the props of this component. You will want to pass down edges
+    parsedEdges: ColoredEdge[];
   // so you can render them here
 }
 
 interface MapState {}
 
 class Map extends Component<MapProps, MapState> {
+
+  // convert the array of ColoredEdges to an array of MapLines
+  to_MapLines() {
+      let mapLineList: JSX.Element[] = []
+      for (let edge of this.props.parsedEdges) {
+          mapLineList.push(
+              <MapLine color={edge.color} x1={edge.x1} y1={edge.y1} x2={edge.x2} y2={edge.y2} key={edge.key}/>
+          )
+      }
+      return mapLineList;
+  }
+
   render() {
     return (
       <div id="map">
@@ -40,10 +54,10 @@ class Map extends Component<MapProps, MapState> {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {
-            // TODO: Render map lines here using the MapLine component. E.g.
             // <MapLine key={key1} color="red" x1={1000} y1={1000} x2={2000} y2={2000}/>
             // will draw a red line from the point 1000,1000 to 2000,2000 on the
-            // map 
+            // map
+            this.to_MapLines()
           }
         </MapContainer>
       </div>
