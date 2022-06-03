@@ -60,7 +60,11 @@ class MapLine extends Component<MapLineProps, {}> {
     return (
       <Polyline
         // Path options includes color, among a variety of line customizations
-        pathOptions={{ color: this.props.color }}
+        pathOptions={
+          { color: this.props.color,
+            weight: 4
+          }
+        }
         // Positions are a list of latitude,longitude pairs that consist of the
         // points on the line we draw on the map
         positions={[

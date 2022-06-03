@@ -13,12 +13,39 @@ import React, {Component} from 'react';
 
 // Allows us to write CSS styles inside App.css, any styles will apply to all components inside <App />
 import "./App.css";
+import Map from "./Map";
+import BuildingSelection from "./BuildingSelection";
+import {Segment} from "./types";
 
-class App extends Component<{}, {}> {
+interface AppState {
+    shortestPath: Segment[] // a list of paths making up of the shortest path.
+}
+
+class App extends Component<{}, AppState> {
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            shortestPath: []
+        }
+    }
 
     render() {
         return (
-            <p>Here's the beginning of your AMAZING CampusPaths GUI!</p>
+            <div>
+                <h1 id="app-title">Find you route!</h1>
+                <div id="separation-line"></div>
+                <div>
+                    <BuildingSelection onChange={(value) => {
+                        this.setState({shortestPath: value});
+                    }}/>
+                </div>
+
+                <div>
+                    <Map shortestPath={this.state.shortestPath}/>
+                </div>
+
+            </div>
         );
     }
 

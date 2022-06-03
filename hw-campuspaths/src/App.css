@@ -19,15 +19,69 @@ file was empty.
 
 /* Centers component with ID "map-wrapper" and sets width and bottom spacing */
 #map {
-    margin-left: auto;
-    margin-right: auto;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*margin-top: 20px;*/
+    /*margin-bottom: 20px;*/
+    /*width: 100%;*/
+    width: 68%;
     margin-top: 20px;
-    margin-bottom: 20px;
-    width: 800px;
+    float: right;
+    child-align: middle;
 }
 
 /* Sets size of map, which has class name "leaflet-container" */
 .leaflet-container {
-    width: 800px;
+    width: 100%;
     height: 600px;
+    margin-right: 20px;
 }
+
+#app-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+#separation-line {
+    height: 20px;
+    width: 100%;
+    background-color: #ffeec9;
+}
+
+#building-selection {
+    width: 32%;
+    margin-top: 20px;
+    float: left;
+    text-align: center;
+}
+
+#button-group {
+    margin: 10px 0px 0px;
+}
+
+#building-selection button {
+    margin: 2px 5px;
+}
+
+#select-group select {
+    width: 450px;
+    height: 30px
+}
+
+#select-group {
+    font-size: 16pt;
+    text-align: center;
+}
+
+#select-group option {
+    text-align: center;
+}
+
+#alert-message {
+    text-align: center;
+    color: red;
+}
+
+svg {height: auto; width: auto}
