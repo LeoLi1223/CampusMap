@@ -48,7 +48,7 @@ class BuildingSelection extends Component<BuildingSelectionProps, BuildingSelect
      * The function is called when the reset button is clicked.
      * Return all states except the options state to the initial states.
      */
-    resetClicked = () => {
+    clearClicked = () => {
         let new_state = {
             startValue: "",
             endValue: "",
@@ -60,12 +60,12 @@ class BuildingSelection extends Component<BuildingSelectionProps, BuildingSelect
     }
 
     /**
-     * The function is called when the draw button is clicked.
+     * The function is called when the Go button is clicked.
      * It makes a request to the Spark server and gets a Json object of ShortestPath,
      * which consists of the starting position, list of paths and a total cost.
      * Updates the ShortestPath state.
      */
-    drawClicked = async() => {
+    goClicked = async() => {
         try {
             if (!this.checkSelect(this.state.startValue, this.state.endValue)) {
                 return;
@@ -77,7 +77,7 @@ class BuildingSelection extends Component<BuildingSelectionProps, BuildingSelect
             let response = await fetch("http://localhost:4567/findPath?start=" + start + "&end=" + end);
             let shortestPath = (await response.json()) as ShortestPath;
 
-            this.setState({shortestPath: shortestPath});
+            this.setState({shortestPath: shortestPath, alertMessage:""});
             this.props.onChange(shortestPath.path);
         } catch (e) {
             alert("There was an error contacting the server.");
@@ -89,9 +89,14 @@ class BuildingSelection extends Component<BuildingSelectionProps, BuildingSelect
      * The function is called when the reverse button is clicked.
      * Switches the start and end building and updates the startValue, endValue and ShortestPath states.
      */
-
     reverseClicked = async() => {
         if (!this.checkSelect(this.state.startValue, this.state.endValue)) {
+            return;
+        }
+        if (this.state.shortestPath === undefined) {
+            this.setState({
+                alertMessage: "Please click Go before Reverse!"
+            });
             return;
         }
 
@@ -153,6 +158,7 @@ class BuildingSelection extends Component<BuildingSelectionProps, BuildingSelect
             let bldgs = (await response.json()) as Building[];
             this.setState({options: bldgs});
         } catch (e) {
+            alert("There was an error contacting the server.");
             console.log(e);
         }
     }
@@ -203,8 +209,8 @@ class BuildingSelection extends Component<BuildingSelectionProps, BuildingSelect
                 </div>
 
                 <div id="button-group">
-                    <button onClick={this.drawClicked}>Draw</button>
-                    <button onClick={this.resetClicked}>Reset</button>
+                    <button onClick={this.goClicked}>Go</button>
+                    <button onClick={this.clearClicked}>Clear</button>
                     <button onClick={this.reverseClicked}>Reverse</button>
                 </div>
 
